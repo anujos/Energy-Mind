@@ -1,0 +1,7 @@
+{
+  "name": "EnergyMind",
+  "description": "Intelligent building energy management and multi-agent anomaly detection platform featuring 24h telemetry load curves, 3D/2D spatial heatmaps, multi-agent automated investigations, What-If scenario simulation, and IoT pipeline monitors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
