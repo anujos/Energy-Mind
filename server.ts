@@ -10,7 +10,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+// In production (e.g. Cloud Run), dynamically bind to the port provided by Cloud Run (defaults to 8080).
+// In development, keep port 3000 for the AI Studio preview reverse proxy.
+const PORT = process.env.NODE_ENV === 'production' && process.env.PORT
+  ? Number(process.env.PORT)
+  : 3000;
 
 app.use(express.json());
 
