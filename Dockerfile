@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install all dependencies (including dev tools like vite, esbuild, typescript)
-RUN npm ci
+RUN npm install
 
 # Copy full application source code
 COPY . .
@@ -25,7 +25,7 @@ ENV PORT=3000
 
 # Install production dependencies only
 COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm install --omit=dev && npm cache clean --force
 
 # Copy compiled client bundle and server script from builder
 COPY --from=builder /app/dist ./dist
