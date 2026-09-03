@@ -1,20 +1,14 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'fs';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
-// In production (e.g. Cloud Run), dynamically bind to the port provided by Cloud Run (defaults to 8080).
-// In development, keep port 3000 for the AI Studio preview reverse proxy.
-const PORT = process.env.NODE_ENV === 'production' && process.env.PORT
-  ? Number(process.env.PORT)
-  : 3000;
+// Dynamically bind to the port provided by Cloud Run / environment ($PORT), defaulting to 8080
+const PORT = process.env.PORT ? Number(process.env.PORT) : 8080;
 
 app.use(express.json());
 
@@ -368,10 +362,18 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    // In production, locate the dist directory (either ./dist or __dirname)
+    const distPath = fs.existsSync(path.join(process.cwd(), 'dist'))
+      ? path.join(process.cwd(), 'dist')
+      : (typeof __dirname !== 'undefined' ? __dirname : process.cwd());
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      const indexPath = path.join(distPath, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+      } else {
+        res.status(200).send('EnergyMind API is running.');
+      }
     });
   }
 
