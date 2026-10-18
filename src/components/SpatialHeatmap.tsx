@@ -176,8 +176,20 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
         </div>
       </div>
 
-      {/* Floor Selector Pills */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        {/* Floor Selector Pills */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            <button
+                key={0}
+                onClick={() => setSelectedFloorId(0)}
+                className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden ${
+                selectedFloorId === 0
+                    ? 'bg-slate-800/90 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                    : 'bg-[#0b0e17] border-slate-800 hover:border-slate-700'
+                }`}
+            >
+                <div className="text-xs font-bold font-telemetry text-white">ALL FLOORS</div>
+                <p className="text-[10px] text-slate-500 mt-0.5">Full Building View</p>
+            </button>
         {BUILDING_FLOORS.map((floor) => {
           const isSelected = floor.id === selectedFloorId;
           const floorAnomalies = floor.zones.filter((z) => getZoneAnomaly(z.id));
@@ -204,11 +216,10 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
                 )}
               </div>
               <p className="text-xs font-medium text-slate-300 mt-1 truncate">{floor.shortName}</p>
-              <p className="text-[10px] text-slate-500 mt-0.5">{floor.totalAreaSqM} m² • {floor.zones.length} Zones</p>
             </button>
           );
         })}
-      </div>
+        </div>
 
       {/* Main Floor Canvas and Zone Inspector Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -218,9 +229,9 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
           <div className="flex items-center justify-between z-10">
             <div>
               <span className="text-xs font-bold text-white uppercase tracking-wider font-telemetry">
-                {currentFloor.name}
+                {selectedFloorId === 0 ? 'Building Overview' : currentFloor.name}
               </span>
-              <p className="text-[11px] text-slate-400">{currentFloor.description}</p>
+              <p className="text-[11px] text-slate-400">{selectedFloorId === 0 ? 'Full 4-Level Digital Twin' : currentFloor.description}</p>
             </div>
 
             {/* Scale legend */}
@@ -235,90 +246,18 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
           {/* SVG Plan / Isometric Renderer */}
           <div className="w-full flex-1 flex items-center justify-center my-2">
             {viewProjection === '3d' ? (
-              <svg viewBox="0 0 800 480" className="w-full max-w-[720px] h-auto select-none">
-                <defs>
-                  {/* Subtle floor shadow */}
-                  <filter id="slabShadow" x="-10%" y="-10%" width="130%" height="130%">
-                    <feDropShadow dx="0" dy="14" stdDeviation="10" floodColor="#000000" floodOpacity="0.7" />
-                  </filter>
-                </defs>
-
-                {/* Extruded Floor Foundation Slab */}
-                <g filter="url(#slabShadow)">
-                  {/* Slab Bottom */}
-                  {(() => {
-                    const p1 = toIso(0, 0, -8);
-                    const p2 = toIso(100, 0, -8);
-                    const p3 = toIso(100, 100, -8);
-                    const p4 = toIso(0, 100, -8);
-                    return (
-                      <polygon
-                        points={`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`}
-                        fill="#0e1320"
-                        stroke="#1e293b"
-                        strokeWidth="1.5"
-                      />
-                    );
-                  })()}
-
-                  {/* Slab Front Wall */}
-                  {(() => {
-                    const p1 = toIso(0, 100, 0);
-                    const p2 = toIso(100, 100, 0);
-                    const p3 = toIso(100, 100, -8);
-                    const p4 = toIso(0, 100, -8);
-                    return (
-                      <polygon
-                        points={`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`}
-                        fill="#0a0e18"
-                        stroke="#1e293b"
-                        strokeWidth="1"
-                      />
-                    );
-                  })()}
-
-                  {/* Slab Right Wall */}
-                  {(() => {
-                    const p1 = toIso(100, 0, 0);
-                    const p2 = toIso(100, 100, 0);
-                    const p3 = toIso(100, 100, -8);
-                    const p4 = toIso(100, 0, -8);
-                    return (
-                      <polygon
-                        points={`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`}
-                        fill="#0d121e"
-                        stroke="#1e293b"
-                        strokeWidth="1"
-                      />
-                    );
-                  })()}
-
-                  {/* Slab Top Surface Grid */}
-                  {(() => {
-                    const p1 = toIso(0, 0, 0);
-                    const p2 = toIso(100, 0, 0);
-                    const p3 = toIso(100, 100, 0);
-                    const p4 = toIso(0, 100, 0);
-                    return (
-                      <polygon
-                        points={`${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`}
-                        fill="#111728"
-                        stroke="#26354f"
-                        strokeWidth="1.5"
-                      />
-                    );
-                  })()}
-                </g>
-
+              <svg viewBox="0 0 800 600" className="w-full max-w-[720px] h-auto select-none">
                 {/* Interactive Zone Polygons in 3D */}
-                {currentFloor.zones.map((zone) => {
+                {(selectedFloorId === 0 ? BUILDING_FLOORS : [currentFloor]).map((floor, floorIdx) => 
+                  floor.zones.map((zone) => {
                   const { x, y, w, h } = zone.coordinates;
                   const isSelected = selectedZoneId === zone.id;
                   const zoneColor = getZoneColor(zone);
                   const hasAnomaly = getZoneAnomaly(zone.id);
 
-                  // Extrusion height for 3D zone block (e.g. 10 units high if selected)
-                  const heightZ = isSelected ? 12 : 5;
+                  // Floor-based Z-offset for stacking in 3D
+                  const floorZ = (floor.id - 1) * 25;
+                  const heightZ = isSelected ? floorZ + 12 : floorZ + 5;
 
                   // Top polygon points
                   const t1 = toIso(x, y, heightZ);
@@ -327,10 +266,10 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
                   const t4 = toIso(x, y + h, heightZ);
 
                   // Base points on floor
-                  const b1 = toIso(x, y, 0);
-                  const b2 = toIso(x + w, y, 0);
-                  const b3 = toIso(x + w, y + h, 0);
-                  const b4 = toIso(x, y + h, 0);
+                  const b1 = toIso(x, y, floorZ);
+                  const b2 = toIso(x + w, y, floorZ);
+                  const b3 = toIso(x + w, y + h, floorZ);
+                  const b4 = toIso(x, y + h, floorZ);
 
                   // Center point for label
                   const center = toIso(x + w / 2, y + h / 2, heightZ + 2);
@@ -403,36 +342,24 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
                       >
                         {zone.name.split(' ')[0]}
                       </text>
-                      <text
-                        x={center.x}
-                        y={center.y + 12}
-                        fill="#e2e8f0"
-                        fontSize="9"
-                        fontFamily="JetBrains Mono"
-                        textAnchor="middle"
-                        className="pointer-events-none"
-                      >
-                        {heatmapMode === 'thermal'
-                          ? `${zone.temperatureC}°C`
-                          : heatmapMode === 'power'
-                          ? `${zone.powerDensityWPerSqM} W/m²`
-                          : heatmapMode === 'airflow'
-                          ? `${zone.vavDamperPct}% VAV`
-                          : `${zone.occupancyCount} pers`}
-                      </text>
                     </g>
                   );
-                })}
+                }))}
               </svg>
             ) : (
               /* 2D Architectural Schematic Blueprint */
-              <svg viewBox="0 0 100 100" className="w-full max-w-[480px] h-auto select-none">
-                <rect x="0" y="0" width="100" height="100" fill="#0b0f19" stroke="#1e293b" strokeWidth="1" />
-                {currentFloor.zones.map((zone) => {
+              <svg viewBox="0 0 220 220" className="w-full max-w-[480px] h-auto select-none">
+                <rect x="0" y="0" width="220" height="220" fill="#0b0f19" stroke="#1e293b" strokeWidth="1" />
+                {(selectedFloorId === 0 ? BUILDING_FLOORS : [currentFloor]).map((floor, floorIdx) => 
+                  floor.zones.map((zone) => {
                   const { x, y, w, h } = zone.coordinates;
                   const isSelected = selectedZoneId === zone.id;
                   const zoneColor = getZoneColor(zone);
                   const hasAnomaly = getZoneAnomaly(zone.id);
+                  
+                  // Simple grid offset for 2D overview
+                  const offsetX = (floorIdx % 2) * 110;
+                  const offsetY = Math.floor(floorIdx / 2) * 110;
 
                   return (
                     <g
@@ -441,10 +368,10 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
                       className="cursor-pointer group"
                     >
                       <rect
-                        x={x}
-                        y={y}
-                        width={w}
-                        height={h}
+                        x={x/2 + offsetX}
+                        y={y/2 + offsetY}
+                        width={w/2}
+                        height={h/2}
                         fill={zoneColor.fill}
                         fillOpacity={isSelected ? 0.65 : 0.35}
                         stroke={isSelected ? '#00f0ff' : zoneColor.stroke}
@@ -453,40 +380,14 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
                         className="transition-all group-hover:fill-opacity-70"
                       />
                       {hasAnomaly && (
-                        <circle cx={x + w - 6} cy={y + 6} r="3" fill="#ef4444" className="animate-pulse" />
+                        <circle cx={x/2 + w/2 + offsetX} cy={y/2 + h/2 + offsetY} r="3" fill="#ef4444" className="animate-pulse" />
                       )}
-                      <text
-                        x={x + w / 2}
-                        y={y + h / 2 - 2}
-                        fill="#ffffff"
-                        fontSize="3.5"
-                        fontFamily="JetBrains Mono"
-                        fontWeight="bold"
-                        textAnchor="middle"
-                      >
-                        {zone.name}
-                      </text>
-                      <text
-                        x={x + w / 2}
-                        y={y + h / 2 + 4}
-                        fill="#cbd5e1"
-                        fontSize="3"
-                        fontFamily="JetBrains Mono"
-                        textAnchor="middle"
-                      >
-                        {heatmapMode === 'thermal'
-                          ? `${zone.temperatureC}°C (${zone.humidityPct}% RH)`
-                          : heatmapMode === 'power'
-                          ? `${zone.powerKw} kW • ${zone.powerDensityWPerSqM} W/m²`
-                          : heatmapMode === 'airflow'
-                          ? `${zone.vavDamperPct}% Damper`
-                          : `${zone.occupancyCount} / ${zone.occupancyCapacity} Occ`}
-                      </text>
                     </g>
                   );
-                })}
+                }))}
               </svg>
-            )}
+            )
+          }
           </div>
 
           {/* Quick zone status pills at bottom */}
@@ -576,65 +477,65 @@ export const SpatialHeatmap: React.FC<SpatialHeatmapProps> = ({
                 </div>
 
                 {/* Relative Humidity */}
-                <div className="bg-[#07090e] p-2.5 rounded-lg border border-slate-800">
-                  <div className="flex items-center justify-between text-slate-400 text-[11px]">
+                <div className="bg-[#07090e] p-2.5 rounded-xl border border-slate-800 card-hover-glow">
+                  <div className="flex items-center justify-between text-slate-400 text-[11px] font-subsystem uppercase">
                     <span>Humidity</span>
                     <Wind className="w-3 h-3 text-sky-400" />
                   </div>
                   <div className="mt-1 flex items-baseline gap-1">
-                    <span className="text-lg font-bold font-mono text-white">
+                    <span className="text-lg font-bold font-num text-white">
                       {selectedZone.humidityPct}%
                     </span>
-                    <span className="text-[10px] text-slate-500 font-mono">RH</span>
+                    <span className="text-[10px] text-slate-500 font-subsystem">RH</span>
                   </div>
-                  <p className="text-[10px] text-slate-500 mt-1 font-mono">ASHRAE 55 Optimal</p>
+                  <p className="text-[10px] text-slate-500 mt-1 font-subsystem">ASHRAE 55 Optimal</p>
                 </div>
 
                 {/* CO2 Concentration */}
-                <div className="bg-[#07090e] p-2.5 rounded-lg border border-slate-800">
-                  <div className="flex items-center justify-between text-slate-400 text-[11px]">
+                <div className="bg-[#07090e] p-2.5 rounded-xl border border-slate-800 card-hover-glow">
+                  <div className="flex items-center justify-between text-slate-400 text-[11px] font-subsystem uppercase">
                     <span>CO2 Level</span>
                     <Users className="w-3 h-3 text-emerald-400" />
                   </div>
                   <div className="mt-1 flex items-baseline gap-1">
                     <span
-                      className={`text-lg font-bold font-mono ${
+                      className={`text-lg font-bold font-num ${
                         selectedZone.co2Ppm > 1000 ? 'text-rose-400' : 'text-white'
                       }`}
                     >
                       {selectedZone.co2Ppm}
                     </span>
-                    <span className="text-[10px] text-slate-500 font-mono">ppm</span>
+                    <span className="text-[10px] text-slate-500 font-subsystem">ppm</span>
                   </div>
-                  <p className="text-[10px] text-slate-500 mt-1 font-mono">
+                  <p className="text-[10px] text-slate-500 mt-1 font-subsystem">
                     {selectedZone.co2Ppm > 1000 ? 'Poor IAQ / Ventilate' : 'Good Indoor Air'}
                   </p>
                 </div>
 
                 {/* Power & Density */}
-                <div className="bg-[#07090e] p-2.5 rounded-lg border border-slate-800">
-                  <div className="flex items-center justify-between text-slate-400 text-[11px]">
+                <div className="bg-[#07090e] p-2.5 rounded-xl border border-slate-800 card-hover-glow">
+                  <div className="flex items-center justify-between text-slate-400 text-[11px] font-subsystem uppercase">
                     <span>Power Load</span>
                     <Zap className="w-3 h-3 text-amber-400" />
                   </div>
                   <div className="mt-1 flex items-baseline gap-1">
-                    <span className="text-lg font-bold font-mono text-amber-300">
+                    <span className="text-lg font-bold font-num text-amber-300">
                       {selectedZone.powerKw} kW
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-400 font-mono mt-1">
+                  <p className="text-[10px] text-slate-400 font-subsystem mt-1">
                     {selectedZone.powerDensityWPerSqM} W/m²
                   </p>
                 </div>
 
                 {/* Occupancy */}
-                <div className="bg-[#07090e] p-2.5 rounded-lg border border-slate-800">
-                  <div className="flex items-center justify-between text-slate-400 text-[11px]">
+                <div className="bg-[#07090e] p-2.5 rounded-xl border border-slate-800 card-hover-glow">
+                  <div className="flex items-center justify-between text-slate-400 text-[11px] font-subsystem uppercase">
                     <span>Occupancy</span>
                     <Users className="w-3 h-3 text-slate-400" />
                   </div>
                   <div className="mt-1 flex items-baseline gap-1">
-                    <span className="text-lg font-bold font-mono text-white">
+                    <span className="text-lg font-bold font-num text-white">
                       {selectedZone.occupancyCount}
                     </span>
                     <span className="text-[10px] text-slate-500 font-mono">

@@ -6,8 +6,25 @@
   }
 }
 
+.font-tech {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
 .font-telemetry {
   font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Modern, high-tech font specifically for subsystems (Chillers, HPC, AHU, Tariff, Time) */
+.font-subsystem {
+  font-family: 'Chakra Petch', 'Space Grotesk', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.font-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 /* Custom dark industrial scrollbars */
@@ -31,7 +48,131 @@
   100% { transform: rotate(360deg); }
 }
 
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulseNeon {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.25), inset 0 0 10px rgba(6, 182, 212, 0.1);
+    border-color: rgba(6, 182, 212, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.45), inset 0 0 15px rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.7);
+  }
+}
+
+@keyframes shimmerSweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
 .animate-radar {
   animation: radarSweep 6s linear infinite;
 }
+
+.animate-float-slow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.animate-pulse-neon {
+  animation: pulseNeon 3s ease-in-out infinite;
+}
+
+/* Interactive card hover lift with glow */
+.card-hover-glow {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover-glow:hover {
+  transform: translateY(-3px);
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.25), 0 0 1px 1px rgba(6, 182, 212, 0.2);
+}
+
+/* Blended image mask for seamless hero integration */
+.image-blend-vignette {
+  mask-image: radial-gradient(circle at 50% 50%, black 50%, transparent 95%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 50%, transparent 95%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.image-blend-fade {
+  mask-image: linear-gradient(to bottom, black 65%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+/* Page entrance & staggered hero loading animations */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textRevealHero {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+    filter: blur(10px);
+  }
+  50% {
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes textGradGlow {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: 100% 50%;
+  }
+}
+
+.animate-page-enter {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-hero-badge {
+  animation: textRevealHero 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.animate-hero-title {
+  animation: textRevealHero 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.animate-hero-desc {
+  animation: textRevealHero 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
+}
+
+.animate-hero-stats {
+  animation: textRevealHero 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.58s both;
+}
+
+.animate-hero-actions {
+  animation: textRevealHero 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.72s both;
+}
+
+.animate-text-grad-glow {
+  animation: textGradGlow 7s ease infinite;
+}
+
 

@@ -227,18 +227,18 @@ export const LoadCurveChart: React.FC<LoadCurveChartProps> = ({
       <div className="bg-[#0b0e17] border border-slate-800 rounded-xl p-3 sm:p-4 relative overflow-hidden">
         {/* Tariff bands legend in top right */}
         {showTariffBands && (
-          <div className="absolute top-4 right-4 z-10 hidden sm:flex items-center gap-3 text-[11px] font-mono bg-[#090c14]/90 px-3 py-1.5 rounded-md border border-slate-800">
-            <span className="flex items-center gap-1 text-emerald-400">
+          <div className="absolute top-4 right-4 z-10 hidden sm:flex items-center gap-3 text-xs font-subsystem bg-[#090c14]/90 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-cyan-900/40 shadow-lg">
+            <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
               <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500/20 border border-emerald-500/40" />
-              Off-Peak $0.12
+              Off-Peak <strong className="font-num font-bold">$0.12</strong>
             </span>
-            <span className="flex items-center gap-1 text-amber-400">
+            <span className="flex items-center gap-1.5 text-amber-400 font-medium">
               <span className="w-2.5 h-2.5 rounded-sm bg-amber-500/20 border border-amber-500/40" />
-              Shoulder $0.28
+              Shoulder <strong className="font-num font-bold">$0.28</strong>
             </span>
-            <span className="flex items-center gap-1 text-rose-400">
+            <span className="flex items-center gap-1.5 text-rose-400 font-medium">
               <span className="w-2.5 h-2.5 rounded-sm bg-rose-500/20 border border-rose-500/50" />
-              Critical Peak $0.65
+              Critical Peak <strong className="font-num font-bold">$0.65</strong>
             </span>
           </div>
         )}
@@ -586,7 +586,7 @@ export const LoadCurveChart: React.FC<LoadCurveChartProps> = ({
 
         {/* Time slider scrubber control */}
         <div className="mt-3 flex items-center gap-3 pt-2 border-t border-slate-800/80">
-          <span className="text-xs font-mono text-slate-400">00:00</span>
+          <span className="text-xs font-subsystem text-slate-400">00:00</span>
           <input
             type="range"
             min="0"
@@ -595,8 +595,8 @@ export const LoadCurveChart: React.FC<LoadCurveChartProps> = ({
             onChange={(e) => onSelectTimeIndex(parseInt(e.target.value))}
             className="flex-1 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
           />
-          <span className="text-xs font-mono text-slate-400">23:45</span>
-          <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
+          <span className="text-xs font-subsystem text-slate-400">23:45</span>
+          <span className="text-xs font-subsystem font-bold px-2.5 py-1 rounded-lg bg-cyan-950 text-cyan-300 border border-cyan-800 shadow-[0_0_10px_rgba(6,182,212,0.2)]">
             {activePoint.time}
           </span>
         </div>
@@ -605,65 +605,65 @@ export const LoadCurveChart: React.FC<LoadCurveChartProps> = ({
       {/* Scrubbed Instantaneous Breakdown Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {/* Load Decomposition Card */}
-        <div className="bg-[#0d111a] border border-slate-800 rounded-xl p-3.5 space-y-2">
+        <div className="bg-[#0d111a] border border-slate-800 rounded-xl p-3.5 space-y-2 card-hover-glow transition-all">
           <div className="flex items-center justify-between border-b border-slate-800/60 pb-2">
-            <span className="text-xs font-bold text-white flex items-center gap-1.5 font-telemetry">
+            <span className="text-xs font-bold text-white flex items-center gap-1.5 font-tech tracking-wide">
               <Zap className="w-3.5 h-3.5 text-cyan-400" />
               Power Deconstruction ({activePoint.time})
             </span>
-            <span className="text-xs font-mono font-semibold text-cyan-300">
+            <span className="text-xs font-num font-bold text-cyan-300">
               {activePoint.totalLoadKw} kW
             </span>
           </div>
 
-          <div className="space-y-1.5 text-xs font-mono pt-1">
+          <div className="space-y-2 text-xs pt-1">
             <div className="flex justify-between items-center text-slate-300">
-              <span className="flex items-center gap-1 text-sky-400">
-                <span className="w-2 h-2 rounded-full bg-sky-500" />
+              <span className="flex items-center gap-1.5 text-sky-400 font-subsystem font-medium uppercase tracking-wider text-[11px]">
+                <span className="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_6px_#38bdf8]" />
                 Chillers & Refrigeration:
               </span>
-              <span>{activePoint.chillersKw} kW</span>
+              <span className="font-num font-semibold text-white">{activePoint.chillersKw} kW</span>
             </div>
             <div className="flex justify-between items-center text-slate-300">
-              <span className="flex items-center gap-1 text-cyan-400">
-                <span className="w-2 h-2 rounded-full bg-cyan-500" />
+              <span className="flex items-center gap-1.5 text-cyan-400 font-subsystem font-medium uppercase tracking-wider text-[11px]">
+                <span className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_6px_#06b6d4]" />
                 AHU Air Handling Fans:
               </span>
-              <span>{activePoint.ahuFanskW} kW</span>
+              <span className="font-num font-semibold text-white">{activePoint.ahuFanskW} kW</span>
             </div>
             <div className="flex justify-between items-center text-slate-300">
-              <span className="flex items-center gap-1 text-violet-400">
-                <span className="w-2 h-2 rounded-full bg-violet-500" />
+              <span className="flex items-center gap-1.5 text-violet-400 font-subsystem font-medium uppercase tracking-wider text-[11px]">
+                <span className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_6px_#8b5cf6]" />
                 HPC Data Labs (Fl 3):
               </span>
-              <span>{activePoint.itLabsKw} kW</span>
+              <span className="font-num font-semibold text-white">{activePoint.itLabsKw} kW</span>
             </div>
             <div className="flex justify-between items-center text-slate-300">
-              <span className="flex items-center gap-1 text-emerald-400">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="flex items-center gap-1.5 text-emerald-400 font-subsystem font-medium uppercase tracking-wider text-[11px]">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" />
                 Plug & Workstation Loads:
               </span>
-              <span>{activePoint.plugLoadsKw} kW</span>
+              <span className="font-num font-semibold text-white">{activePoint.plugLoadsKw} kW</span>
             </div>
             <div className="flex justify-between items-center text-slate-300">
-              <span className="flex items-center gap-1 text-amber-400">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span className="flex items-center gap-1.5 text-amber-400 font-subsystem font-medium uppercase tracking-wider text-[11px]">
+                <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_6px_#f59e0b]" />
                 EV Fleet Rapid Chargers:
               </span>
-              <span>{activePoint.evFleetKw} kW</span>
+              <span className="font-num font-semibold text-white">{activePoint.evFleetKw} kW</span>
             </div>
           </div>
         </div>
 
         {/* Model Deviation & Forecast */}
-        <div className="bg-[#0d111a] border border-slate-800 rounded-xl p-3.5 space-y-2">
+        <div className="bg-[#0d111a] border border-slate-800 rounded-xl p-3.5 space-y-2 card-hover-glow transition-all">
           <div className="flex items-center justify-between border-b border-slate-800/60 pb-2">
-            <span className="text-xs font-bold text-white flex items-center gap-1.5 font-telemetry">
+            <span className="text-xs font-bold text-white flex items-center gap-1.5 font-tech tracking-wide">
               <BarChart2 className="w-3.5 h-3.5 text-emerald-400" />
               Predictive Model Drift
             </span>
             <span
-              className={`text-xs font-mono font-semibold ${
+              className={`text-xs font-subsystem font-bold ${
                 activePoint.totalLoadKw > activePoint.baselineKw ? 'text-amber-400' : 'text-emerald-400'
               }`}
             >
@@ -674,8 +674,8 @@ export const LoadCurveChart: React.FC<LoadCurveChartProps> = ({
 
           <div className="space-y-2 text-xs pt-1">
             <div className="flex justify-between text-slate-400">
-              <span>Historical Baseline Expectation:</span>
-              <span className="font-mono text-slate-200">{activePoint.baselineKw} kW</span>
+              <span className="font-subsystem">Historical Baseline:</span>
+              <span className="font-num font-semibold text-slate-200">{activePoint.baselineKw} kW</span>
             </div>
             <div className="flex justify-between text-slate-400">
               <span>Gemini ML 15m Ahead Forecast:</span>

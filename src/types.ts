@@ -1,4 +1,4 @@
-export type SystemType = 'HVAC' | 'Solar/BESS' | 'Weather' | 'Occupancy';
+export type SystemType = 'HVAC' | 'Solar/BESS' | 'Weather' | 'Occupancy' | 'Carbon' | 'Pump';
 export type SeverityType = 'critical' | 'warning' | 'optimization' | 'info';
 
 export interface AnomalyEvent {
@@ -55,7 +55,6 @@ export interface ZoneData {
   status: 'normal' | 'warning' | 'critical';
   activeAlert?: string;
   coordinates: {
-    // Relative coordinates for floor plan rendering
     x: number;
     y: number;
     w: number;
@@ -74,7 +73,7 @@ export interface FloorData {
 }
 
 export interface AgentReport {
-  agentId: 'hvac' | 'solar' | 'weather' | 'occupancy';
+  agentId: 'hvac' | 'solar' | 'weather' | 'occupancy' | 'carbon' | 'pump';
   agentName: string;
   agentRole: string;
   avatarIcon: string;

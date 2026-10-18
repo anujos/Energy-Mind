@@ -8,6 +8,7 @@ import {
   CloudSun,
   Cpu,
   DollarSign,
+  Droplets,
   Flame,
   Globe,
   Leaf,
@@ -42,7 +43,7 @@ export const MultiAgentRoom: React.FC<MultiAgentRoomProps> = ({
   const [isInvestigating, setIsInvestigating] = useState(false);
   const [investigationSession, setInvestigationSession] = useState<InvestigationSession | null>(null);
   const [dispatchSuccess, setDispatchSuccess] = useState(false);
-  const [activeAgentTab, setActiveAgentTab] = useState<'all' | 'hvac' | 'solar' | 'weather' | 'occupancy'>('all');
+  const [activeAgentTab, setActiveAgentTab] = useState<'all' | 'hvac' | 'solar' | 'weather' | 'occupancy' | 'carbon' | 'pump'>('all');
 
   const currentAnomaly = anomalies.find((a) => a.id === activeAnomalyId) || anomalies[0];
 
@@ -271,7 +272,7 @@ export const MultiAgentRoom: React.FC<MultiAgentRoomProps> = ({
                     <div className="flex items-center gap-2">
                       <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 text-xs font-bold font-telemetry">
                         <ShieldCheck className="w-4 h-4 text-cyan-400" />
-                        MASTER ARBITER CONSENSUS VERDICT
+                        CHIEF ARBITER CONSENSUS VERDICT
                       </span>
                       <span className="text-xs font-mono text-emerald-400 font-bold">
                         {investigationSession.arbiterSynthesis.masterConfidencePct}% Confidence
@@ -389,6 +390,10 @@ export const MultiAgentRoom: React.FC<MultiAgentRoomProps> = ({
                       ? Sun
                       : agent.agentId === 'weather'
                       ? CloudSun
+                      : agent.agentId === 'carbon'
+                      ? Leaf
+                      : agent.agentId === 'pump'
+                      ? Droplets
                       : Users;
 
                   const iconColor =
@@ -398,6 +403,10 @@ export const MultiAgentRoom: React.FC<MultiAgentRoomProps> = ({
                       ? 'text-amber-400'
                       : agent.agentId === 'weather'
                       ? 'text-sky-400'
+                      : agent.agentId === 'carbon'
+                      ? 'text-emerald-400'
+                      : agent.agentId === 'pump'
+                      ? 'text-blue-400'
                       : 'text-emerald-400';
 
                   return (
